@@ -1,13 +1,16 @@
 package com.yearsaday.qna.service
 
+import com.yearsaday.qna.entity.Question
 import com.yearsaday.qna.message.AnswerCreateRequest
 import com.yearsaday.qna.message.AnswerUpdateRequest
 import com.yearsaday.qna.repository.AnswerRepository
+import com.yearsaday.qna.repository.QuestionRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.event.annotation.BeforeTestClass
 
 @SpringBootTest
 class AnswerDataServiceTest {
@@ -17,7 +20,14 @@ class AnswerDataServiceTest {
     @Autowired
     private lateinit var repository: AnswerRepository
 
+    @Autowired
+    private lateinit var questionRepository: QuestionRepository
+
     val ANSWER = "답변1"
+    val QUESTION by lazy {
+        val question = Question(0, "질문1")
+        questionRepository.save(question)
+    }
 
     @BeforeEach
     fun cleanUp() {
@@ -60,7 +70,7 @@ class AnswerDataServiceTest {
         val saved = service.save(request)
         assertThat(repository.findAll().size).isEqualTo(1)
         val updateAnswer = "답변2"
-        val updateRequest = AnswerUpdateRequest(updateAnswer)
+        val updateRequest = AnswerUpdateRequest(updateAnswer, QUESTION)
 
         // when
         val result = service.update(saved.id, updateRequest)
@@ -87,7 +97,7 @@ class AnswerDataServiceTest {
     }
 
     private fun makeAnswerRequest(): AnswerCreateRequest {
-        return AnswerCreateRequest(ANSWER)
+        return AnswerCreateRequest(ANSWER, QUESTION)
     }
 
 }

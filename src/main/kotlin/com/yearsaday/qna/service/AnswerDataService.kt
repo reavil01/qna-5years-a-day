@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service
 class AnswerDataService(
     val repository: AnswerRepository
 ) {
+
     fun save(request: AnswerCreateRequest): AnswerResponse {
-        val entity = Answer(0, request.answer)
+        val entity = Answer(0, request.answer, request.question)
         val saved = repository.save(entity)
 
         return toAnswerResponse(saved)
@@ -26,7 +27,7 @@ class AnswerDataService(
 
     fun update(id: Int, request: AnswerUpdateRequest): AnswerResponse {
         val entity = repository.findById(id).orElseThrow()
-        val update = Answer(entity.id, request.answer)
+        val update = Answer(entity.id, request.answer, request.question)
         val result = repository.save(update)
 
         return toAnswerResponse(result)
@@ -38,6 +39,6 @@ class AnswerDataService(
 
 
     private fun toAnswerResponse(entity: Answer): AnswerResponse {
-        return AnswerResponse(entity.id, entity.answer)
+        return AnswerResponse(entity.id, entity.answer, entity.question)
     }
 }

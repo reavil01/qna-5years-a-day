@@ -2,6 +2,7 @@ package com.yearsaday.qna.service
 
 import com.yearsaday.qna.message.QuestionCreateRequest
 import com.yearsaday.qna.message.QuestionUpdateRequest
+import com.yearsaday.qna.repository.AnswerRepository
 import com.yearsaday.qna.repository.QuestionRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -17,10 +18,14 @@ class QuestionDataServiceTest {
     @Autowired
     private lateinit var repository: QuestionRepository
 
+    @Autowired
+    private lateinit var answerRepository: AnswerRepository
+
     val SENTENCE = "질문1"
 
     @BeforeEach
     fun cleanUp() {
+        answerRepository.deleteAll()
         repository.deleteAll()
     }
 

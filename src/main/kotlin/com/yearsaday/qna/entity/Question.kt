@@ -1,15 +1,16 @@
 package com.yearsaday.qna.entity
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
-data class Question(
+class Question(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @Column
     val id: Int,
 
     val sentence: String,
+
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    val answers: MutableList<Answer> = ArrayList()
 )
