@@ -13,6 +13,4 @@ class Answer(
 
     @ManyToOne(fetch = FetchType.LAZY)
     val question: Question,
-
-//    val creatTime: LocalDateTime,
-)
+) : BaseTime()

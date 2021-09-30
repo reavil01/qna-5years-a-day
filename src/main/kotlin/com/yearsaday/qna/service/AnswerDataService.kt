@@ -39,6 +39,6 @@ class AnswerDataService(
 
 
     private fun toAnswerResponse(entity: Answer): AnswerResponse {
-        return AnswerResponse(entity.id, entity.answer, entity.question)
+        return AnswerResponse(entity.id, entity.answer, entity.question, entity.createdTime, entity.updatedTime)
     }
 }
