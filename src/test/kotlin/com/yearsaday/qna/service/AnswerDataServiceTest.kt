@@ -3,7 +3,7 @@ package com.yearsaday.qna.service
 import com.yearsaday.qna.message.AnswerCreateRequest
 import com.yearsaday.qna.message.AnswerUpdateRequest
 import com.yearsaday.qna.repository.AnswerRepository
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,9 +33,9 @@ class AnswerDataServiceTest {
         val result = service.save(request)
 
         // then
-        Assertions.assertThat(repository.findAll().size).isEqualTo(1)
-        Assertions.assertThat(result.id).isEqualTo(1)
-        Assertions.assertThat(result.answer).isEqualTo(request.answer)
+        assertThat(repository.findAll().size).isEqualTo(1)
+        assertThat(result.id).isGreaterThan(0)
+        assertThat(result.answer).isEqualTo(request.answer)
     }
 
     @Test
@@ -43,32 +43,33 @@ class AnswerDataServiceTest {
         // given
         val request = makeAnswerRequest()
         val saved = service.save(request)
-        Assertions.assertThat(repository.findAll().size).isEqualTo(1)
+        assertThat(repository.findAll().size).isEqualTo(1)
 
         // when
         val result = service.findById(saved.id)
 
         // then
-        Assertions.assertThat(result.id).isEqualTo(saved.id)
-        Assertions.assertThat(result.answer).isEqualTo(request.answer)
+        assertThat(result.id).isEqualTo(saved.id)
+        assertThat(result.answer).isEqualTo(request.answer)
     }
 
     @Test
     fun updateQuestionTest() {
         // given
-        val question = makeAnswerRequest()
-        val saved = service.save(question)
-        Assertions.assertThat(repository.findAll().size).isEqualTo(1)
-        val answer = "답변2"
-        val request = AnswerUpdateRequest(answer)
+        val request = makeAnswerRequest()
+        val saved = service.save(request)
+        assertThat(repository.findAll().size).isEqualTo(1)
+        val updateAnswer = "답변2"
+        val updateRequest = AnswerUpdateRequest(updateAnswer)
 
         // when
-        service.update(saved.id, request)
+        val result = service.update(saved.id, updateRequest)
 
         // then
-        Assertions.assertThat(repository.findAll().size).isEqualTo(1)
+        assertThat(repository.findAll().size).isEqualTo(1)
+        assertThat(result.answer).isEqualTo(updateAnswer)
         val updated = repository.findById(saved.id).orElseThrow()
-        Assertions.assertThat(updated.answer).isEqualTo(answer)
+        assertThat(updated.answer).isEqualTo(updateAnswer)
     }
 
     @Test
@@ -76,13 +77,13 @@ class AnswerDataServiceTest {
         // given
         val request = makeAnswerRequest()
         val saved = service.save(request)
-        Assertions.assertThat(repository.findAll().size).isEqualTo(1)
+        assertThat(repository.findAll().size).isEqualTo(1)
 
         // when
         service.delete(saved.id)
 
         // then
-        Assertions.assertThat(repository.findAll().size).isEqualTo(0)
+        assertThat(repository.findAll().size).isEqualTo(0)
     }
 
     private fun makeAnswerRequest(): AnswerCreateRequest {

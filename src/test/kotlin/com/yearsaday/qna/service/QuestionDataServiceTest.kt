@@ -27,22 +27,22 @@ class QuestionDataServiceTest {
     @Test
     fun saveQuestionTest() {
         // given
-        val question = makeQuestionRequest()
+        val request = makeQuestionRequest()
 
         // when
-        val result = service.save(question)
+        val result = service.save(request)
 
         // then
         assertThat(repository.findAll().size).isEqualTo(1)
-        assertThat(result.id).isEqualTo(1)
+        assertThat(result.id).isGreaterThan(0)
         assertThat(result.sentence).isEqualTo(SENTENCE)
     }
 
     @Test
     fun findQuestionTest() {
         // given
-        val question = makeQuestionRequest()
-        val saved = service.save(question)
+        val request = makeQuestionRequest()
+        val saved = service.save(request)
         assertThat(repository.findAll().size).isEqualTo(1)
 
         // when
@@ -50,25 +50,26 @@ class QuestionDataServiceTest {
 
         // then
         assertThat(result.id).isEqualTo(saved.id)
-        assertThat(result.sentence).isEqualTo(question.sentence)
+        assertThat(result.sentence).isEqualTo(request.sentence)
     }
 
     @Test
     fun updateQuestionTest() {
         // given
-        val question = makeQuestionRequest()
-        val saved = service.save(question)
+        val request = makeQuestionRequest()
+        val saved = service.save(request)
         assertThat(repository.findAll().size).isEqualTo(1)
-        val sentence = "질문2"
-        val request = QuestionUpdateRequest(sentence)
+        val updateSentence = "질문2"
+        val updateRequest = QuestionUpdateRequest(updateSentence)
 
         // when
-        service.update(saved.id, request)
+        val result = service.update(saved.id, updateRequest)
 
         // then
         assertThat(repository.findAll().size).isEqualTo(1)
+        assertThat(result.sentence).isEqualTo(updateSentence)
         val updated = repository.findById(saved.id).orElseThrow()
-        assertThat(updated.sentence).isEqualTo(sentence)
+        assertThat(updated.sentence).isEqualTo(updateSentence)
     }
 
     @Test
