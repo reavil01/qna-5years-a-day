@@ -29,7 +29,6 @@ class QuestionAnswerMappingTest {
         // given
         val question = Question(0, "질문1")
         val answer = Answer(0, "답변1", question)
-        question.answers.add(answer)
 
         // when
         val savedQuestion = questionRepository.save(question)
@@ -48,41 +47,15 @@ class QuestionAnswerMappingTest {
         // given
         val question = Question(0, "질문1")
         val answer = Answer(0, "답변1", question)
-        question.answers.add(answer)
         val savedQuestion = questionRepository.save(question)
         val savedAnswer = answerRepository.save(answer)
 
         // when
         answerRepository.delete(savedAnswer)
-        savedQuestion.answers.remove(savedAnswer)
 
         // then
         assertThat(answerRepository.findAll().size).isEqualTo(0)
         val reloaded = questionRepository.getById(savedQuestion.id)
         assertThat(reloaded.answers.size).isEqualTo(0)
-    }
-
-    @Test
-    fun mappingUpdateTest() {
-        // given
-        val question = Question(0, "질문1")
-        val answer = Answer(0, "답변1", question)
-        question.answers.add(answer)
-        val savedQuestion = questionRepository.save(question)
-        val savedAnswer = answerRepository.save(answer)
-        val newAnswer = Answer(0, "답변2", question)
-        question.answers.add(newAnswer)
-
-        // when
-        val newSavedAnswer = answerRepository.save(newAnswer)
-
-        // then
-        assertThat(savedQuestion.id).isEqualTo(savedAnswer.question.id)
-        assertThat(savedQuestion.sentence).isEqualTo(savedAnswer.question.sentence)
-        assertThat(savedQuestion.answers.size).isEqualTo(2)
-        assertThat(savedAnswer.id).isEqualTo(savedQuestion.answers[0].id)
-        assertThat(savedAnswer.answer).isEqualTo(savedQuestion.answers[0].answer)
-        assertThat(newSavedAnswer.id).isEqualTo(savedQuestion.answers[1].id)
-        assertThat(newSavedAnswer.answer).isEqualTo(savedQuestion.answers[1].answer)
     }
 }

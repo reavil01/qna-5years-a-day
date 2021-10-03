@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.event.annotation.BeforeTestClass
+import javax.transaction.Transactional
 
 @SpringBootTest
 class AnswerDataServiceTest {
@@ -24,18 +24,20 @@ class AnswerDataServiceTest {
     private lateinit var questionRepository: QuestionRepository
 
     val ANSWER = "답변1"
-    val QUESTION by lazy {
-        val question = Question(0, "질문1")
-        questionRepository.save(question)
-    }
+    lateinit var QUESTION: Question
 
     @BeforeEach
     fun cleanUp() {
         repository.deleteAll()
+        questionRepository.deleteAll()
+
+        val question = Question(0, "질문1")
+        QUESTION = questionRepository.save(question)
     }
 
     @Test
-    fun saveQuestionTest() {
+    @Transactional
+    fun saveAnswerTest() {
         // given
         val request = makeAnswerRequest()
 
@@ -46,10 +48,12 @@ class AnswerDataServiceTest {
         assertThat(repository.findAll().size).isEqualTo(1)
         assertThat(result.id).isGreaterThan(0)
         assertThat(result.answer).isEqualTo(request.answer)
+        assertThat(result.question.answers.size).isEqualTo(1)
     }
 
     @Test
-    fun findQuestionTest() {
+    @Transactional
+    fun findAnswerTest() {
         // given
         val request = makeAnswerRequest()
         val saved = service.save(request)
@@ -61,16 +65,25 @@ class AnswerDataServiceTest {
         // then
         assertThat(result.id).isEqualTo(saved.id)
         assertThat(result.answer).isEqualTo(request.answer)
+        assertThat(result.question.answers.size).isEqualTo(1)
     }
 
     @Test
-    fun updateQuestionTest() {
+    @Transactional
+    fun updateAnswerTest() {
         // given
         val request = makeAnswerRequest()
         val saved = service.save(request)
         assertThat(repository.findAll().size).isEqualTo(1)
+
         val updateAnswer = "답변2"
-        val updateRequest = AnswerUpdateRequest(updateAnswer, QUESTION)
+
+        val question = Question(0, "질문2")
+        val savedQuestion = questionRepository.save(question)
+        val updateRequest = AnswerUpdateRequest(updateAnswer, savedQuestion)
+
+        val beforeQuestionId = saved.question.id
+        val beforeQuestion = questionRepository.findById(beforeQuestionId).orElseThrow()
 
         // when
         val result = service.update(saved.id, updateRequest)
@@ -78,12 +91,14 @@ class AnswerDataServiceTest {
         // then
         assertThat(repository.findAll().size).isEqualTo(1)
         assertThat(result.answer).isEqualTo(updateAnswer)
-        val updated = repository.findById(saved.id).orElseThrow()
-        assertThat(updated.answer).isEqualTo(updateAnswer)
+        assertThat(result.question.sentence).isEqualTo(savedQuestion.sentence)
+        assertThat(beforeQuestion.answers.size).isEqualTo(0)
+        assertThat(savedQuestion.answers.size).isEqualTo(1)
     }
 
     @Test
-    fun deleteQuestionTest() {
+    @Transactional
+    fun deleteAnswerTest() {
         // given
         val request = makeAnswerRequest()
         val saved = service.save(request)
@@ -94,6 +109,7 @@ class AnswerDataServiceTest {
 
         // then
         assertThat(repository.findAll().size).isEqualTo(0)
+        assertThat(QUESTION.answers.size).isEqualTo(0)
     }
 
     private fun makeAnswerRequest(): AnswerCreateRequest {
