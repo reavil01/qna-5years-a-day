@@ -93,6 +93,7 @@ class QuestionDataServiceTest {
     }
 
     @Test
+    @Transactional
     fun deleteQuestionTest() {
         // given
         val question = makeQuestionRequest()
