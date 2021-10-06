@@ -29,6 +29,7 @@ class QuestionAnswerMappingTest {
         // given
         val question = Question(0, "질문1")
         val answer = Answer(0, "답변1", question)
+        question.answers.add(answer)
 
         // when
         val savedQuestion = questionRepository.save(question)

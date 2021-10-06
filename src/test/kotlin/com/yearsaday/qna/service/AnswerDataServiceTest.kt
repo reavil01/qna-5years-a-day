@@ -77,8 +77,9 @@ class AnswerDataServiceTest {
         assertThat(repository.findAll().size).isEqualTo(1)
 
         val updateAnswer = "답변2"
+        val updateSentence = "질문2"
 
-        val question = Question(0, "질문2")
+        val question = Question(0, updateSentence)
         val savedQuestion = questionRepository.save(question)
         val updateRequest = AnswerUpdateRequest(updateAnswer, savedQuestion)
 
@@ -91,7 +92,7 @@ class AnswerDataServiceTest {
         // then
         assertThat(repository.findAll().size).isEqualTo(1)
         assertThat(result.answer).isEqualTo(updateAnswer)
-        assertThat(result.question.sentence).isEqualTo(savedQuestion.sentence)
+        assertThat(savedQuestion.sentence).isEqualTo(updateSentence)
         assertThat(beforeQuestion.answers.size).isEqualTo(0)
         assertThat(savedQuestion.answers.size).isEqualTo(1)
     }
