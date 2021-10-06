@@ -3,7 +3,7 @@ package com.yearsaday.qna.entity
 import javax.persistence.*
 
 @Entity
-class Answer(
+data class Answer(
     @Id
     @GeneratedValue
     @Column
