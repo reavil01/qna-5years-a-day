@@ -25,18 +25,23 @@ class AnswerControllerTest {
     @Autowired
     private lateinit var mock: MockMvc
 
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
+
     @MockBean
     private lateinit var answerService: AnswerDataService
 
+    private val API_URL = "/answers"
+
     private val question = Question(1, "질문1")
-    private val objectMapper = ObjectMapper()
 
     @Test
     fun findAnswerTest() {
         // given
         val answerSentence = "답변1"
+        val answerId = 1
         val answerResponse = AnswerResponse(
-            1,
+            answerId,
             answerSentence,
             question,
             LocalDateTime.now(),
@@ -45,12 +50,12 @@ class AnswerControllerTest {
         given(answerService.findById(1)).willReturn(answerResponse)
 
         // when
-        mock.perform(get("/answers/1"))
+        mock.perform(get("$API_URL/$answerId"))
             .andExpect(status().isOk)
             .andExpect(content().string(containsString(answerSentence)))
 
         // then
-        verify(answerService).findById(1)
+        verify(answerService).findById(answerId)
     }
 
     @Test
@@ -64,11 +69,10 @@ class AnswerControllerTest {
 
         // when
         mock.perform(
-            post("/answers")
+            post("$API_URL")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-        )
-            .andExpect(status().isCreated)
+        ).andExpect(status().isCreated)
 
         // then
         verify(answerService).save(answerCreateRequest)
@@ -87,11 +91,10 @@ class AnswerControllerTest {
 
         // when
         mock.perform(
-            put("/answers/$updateId")
+            put("$API_URL/$updateId")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-        )
-            .andExpect(status().isOk)
+        ).andExpect(status().isOk)
 
         // then
         verify(answerService).update(updateId, answerUpdateRequest)
@@ -103,7 +106,7 @@ class AnswerControllerTest {
         val deleteId = 1
 
         // when
-        mock.perform(delete("/answers/$deleteId"))
+        mock.perform(delete("$API_URL/$deleteId"))
             .andExpect(status().isOk)
 
         // then

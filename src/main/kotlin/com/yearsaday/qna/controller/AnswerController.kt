@@ -1,6 +1,5 @@
 package com.yearsaday.qna.controller
 
-import com.yearsaday.qna.entity.Answer
 import com.yearsaday.qna.message.AnswerCreateRequest
 import com.yearsaday.qna.message.AnswerResponse
 import com.yearsaday.qna.message.AnswerUpdateRequest
