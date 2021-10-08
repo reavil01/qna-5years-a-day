@@ -113,6 +113,6 @@ class QuestionControllerTest {
         questionId: Int,
         questionSentence: String
     ): QuestionResponse {
-        return QuestionResponse(questionId, questionSentence, listOf())
+        return QuestionResponse(questionId, questionSentence)
     }
 }

@@ -1,5 +1,6 @@
 package com.yearsaday.qna.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
@@ -10,7 +11,4 @@ data class Question(
     val id: Int,
 
     val sentence: String,
-
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
-    val answers: MutableList<Answer> = ArrayList()
 )

@@ -15,7 +15,6 @@ class AnswerDataService(
     fun save(request: AnswerCreateRequest): AnswerResponse {
         val entity = Answer(0, request.answer, request.question)
         val saved = repository.save(entity)
-        addAnswerToQuestion(saved)
 
         return toAnswerResponse(saved)
     }
@@ -28,27 +27,15 @@ class AnswerDataService(
 
     fun update(id: Int, request: AnswerUpdateRequest): AnswerResponse {
         val entity = repository.findById(id).orElseThrow()
-        removeAnswerFromQuestion(entity)
         val update = Answer(entity.id, request.answer, request.question)
-
         val result = repository.save(update)
-        addAnswerToQuestion(result)
 
         return toAnswerResponse(result)
     }
 
     fun delete(id: Int) {
         val saved = repository.findById(id).orElseThrow()
-        removeAnswerFromQuestion(saved)
         repository.deleteById(id)
-    }
-
-    private fun addAnswerToQuestion(answer: Answer) {
-        answer.question.answers.add(answer)
-    }
-
-    private fun removeAnswerFromQuestion(answer: Answer) {
-        answer.question.answers.remove(answer)
     }
 
     private fun toAnswerResponse(entity: Answer): AnswerResponse {

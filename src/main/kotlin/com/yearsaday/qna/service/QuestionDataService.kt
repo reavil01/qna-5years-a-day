@@ -27,21 +27,18 @@ class QuestionDataService(
     }
 
     fun delete(id: Int) {
-        if(repository.findById(id).orElseThrow().answers.size > 0)
-            throw IllegalArgumentException()
-
         repository.deleteById(id)
     }
 
     fun update(id: Int, request: QuestionUpdateRequest): QuestionResponse {
         val saved = repository.findById(id).orElseThrow()
-        val update = Question(id, request.sentence, saved.answers)
+        val update = Question(id, request.sentence)
         val result = repository.save(update)
 
         return toQuestionResponse(result)
     }
 
     private fun toQuestionResponse(entity: Question): QuestionResponse {
-        return QuestionResponse(entity.id, entity.sentence, entity.answers)
+        return QuestionResponse(entity.id, entity.sentence)
     }
 }

@@ -29,7 +29,6 @@ class QuestionAnswerMappingTest {
         // given
         val question = Question(0, "질문1")
         val answer = Answer(0, "답변1", question)
-        question.answers.add(answer)
 
         // when
         val savedQuestion = questionRepository.save(question)
@@ -38,9 +37,6 @@ class QuestionAnswerMappingTest {
         // then
         assertThat(savedQuestion.id).isEqualTo(savedAnswer.question.id)
         assertThat(savedQuestion.sentence).isEqualTo(savedAnswer.question.sentence)
-        assertThat(savedQuestion.answers.size).isEqualTo(1)
-        assertThat(savedAnswer.id).isEqualTo(savedQuestion.answers[0].id)
-        assertThat(savedAnswer.answer).isEqualTo(savedQuestion.answers[0].answer)
     }
 
     @Test
@@ -56,7 +52,5 @@ class QuestionAnswerMappingTest {
 
         // then
         assertThat(answerRepository.findAll().size).isEqualTo(0)
-        val reloaded = questionRepository.getById(savedQuestion.id)
-        assertThat(reloaded.answers.size).isEqualTo(0)
     }
 }
