@@ -1,6 +1,7 @@
 package com.yearsaday.qna.configure
 
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -9,6 +10,11 @@ class WebConfig: WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         super.addCorsMappings(registry)
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:3000");
+            .allowedOrigins("http://localhost:3000")
+            .allowedMethods(
+                HttpMethod.GET.name,
+                HttpMethod.POST.name,
+                HttpMethod.PUT.name,
+            )
     }
 }

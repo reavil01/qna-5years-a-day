@@ -6,12 +6,35 @@ import com.yearsaday.qna.message.AnswerUpdateRequest
 import com.yearsaday.qna.service.AnswerDataService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
+import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/answers")
 class AnswerController(
     val answerService: AnswerDataService
 ) {
+
+    @GetMapping("")
+    fun findAll(): List<AnswerResponse> {
+        return answerService.findAll()
+    }
+
+    @PostMapping("/{questionId}")
+    fun getTodayAnswer(
+        @PathVariable("questionId") questionId: Int,
+        response: HttpServletResponse
+    ): AnswerResponse? {
+        val year = LocalDateTime.now().year
+        val result = answerService.findByYearAndQuestionId(year, questionId)
+
+        return if (result.isPresent) {
+            result.get()
+        } else {
+            response.status = HttpStatus.NO_CONTENT.value()
+            null
+        }
+    }
 
     @GetMapping("/{id}")
     fun findById(
