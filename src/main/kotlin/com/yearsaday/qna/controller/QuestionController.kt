@@ -4,12 +4,21 @@ import com.yearsaday.qna.message.*
 import com.yearsaday.qna.service.QuestionDataService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/questions")
 class QuestionController(
     val questionService: QuestionDataService
 ) {
+
+    @GetMapping("/")
+    fun getTodayQuestion(
+    ): QuestionResponse {
+        val month = LocalDateTime.now().monthValue
+        val day = LocalDateTime.now().dayOfMonth
+        return questionService.findByMonthAndDays(month, day)
+    }
 
     @GetMapping("/{id}")
     fun findById(

@@ -6,15 +6,20 @@ import com.yearsaday.qna.message.QuestionResponse
 import com.yearsaday.qna.message.QuestionUpdateRequest
 import com.yearsaday.qna.repository.QuestionRepository
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 
 @Service
 class QuestionDataService(
     val repository: QuestionRepository
 ) {
 
+    fun findByMonthAndDays(month: Int, day: Int): QuestionResponse {
+        val entity = repository.findByMonthAndDay(month, day)
+
+        return toQuestionResponse(entity)
+    }
+
     fun save(request: QuestionCreateRequest): QuestionResponse {
-        val question = Question(0, request.sentence)
+        val question = Question(0, request.sentence, request.month, request.day)
         val entity = repository.save(question)
 
         return toQuestionResponse(entity)
@@ -32,7 +37,7 @@ class QuestionDataService(
 
     fun update(id: Int, request: QuestionUpdateRequest): QuestionResponse {
         val saved = repository.findById(id).orElseThrow()
-        val update = Question(id, request.sentence)
+        val update = Question(id, request.sentence, request.month, request.day)
         val result = repository.save(update)
 
         return toQuestionResponse(result)
