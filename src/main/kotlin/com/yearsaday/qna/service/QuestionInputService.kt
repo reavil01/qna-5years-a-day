@@ -1,6 +1,6 @@
 package com.yearsaday.qna.service
 
-import com.yearsaday.qna.message.QuestionCreateRequest
+import com.yearsaday.qna.message.QuestionRequest
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
@@ -21,7 +21,7 @@ private class QuestionInputService(
         monthList.zip(maxDayList).flatMap { (month, maxDay) ->
             (1..maxDay).map { month to it }
         }.forEachIndexed { index, (month, day) ->
-            val question = QuestionCreateRequest(questions[index], month, day)
+            val question = QuestionRequest(questions[index], month, day)
             questionDataService.save(question)
         }
     }

@@ -1,6 +1,6 @@
 package com.yearsaday.qna.message
 
-data class QuestionCreateRequest(
+data class QuestionRequest(
     val sentence: String,
     val month: Int,
     val day: Int,

@@ -1,8 +1,7 @@
 package com.yearsaday.qna.controller
 
-import com.yearsaday.qna.message.AnswerCreateRequest
+import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
-import com.yearsaday.qna.message.AnswerUpdateRequest
 import com.yearsaday.qna.service.AnswerDataService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -28,9 +27,7 @@ class AnswerController(
         val year = LocalDateTime.now().year
         val result = answerService.findByYearAndQuestionId(year, questionId)
 
-        return if (result.isPresent) {
-            result.get()
-        } else {
+        return result ?: let{
             response.status = HttpStatus.NO_CONTENT.value()
             null
         }
@@ -46,17 +43,17 @@ class AnswerController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
-        @RequestBody answerCreateRequest: AnswerCreateRequest
+        @RequestBody answerRequest: AnswerRequest
     ): AnswerResponse {
-        return answerService.save(answerCreateRequest)
+        return answerService.preventDuplicationSave(answerRequest)
     }
 
     @PutMapping("/{id}")
     fun update(
         @PathVariable("id") id: Int,
-        @RequestBody answerUpdateRequest: AnswerUpdateRequest
+        @RequestBody answerRequest: AnswerRequest
     ): AnswerResponse {
-        return answerService.update(id, answerUpdateRequest)
+        return answerService.update(id, answerRequest)
     }
 
     @DeleteMapping("/{id}")

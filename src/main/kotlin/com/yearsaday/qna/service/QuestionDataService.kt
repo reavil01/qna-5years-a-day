@@ -1,9 +1,8 @@
 package com.yearsaday.qna.service
 
 import com.yearsaday.qna.entity.Question
-import com.yearsaday.qna.message.QuestionCreateRequest
+import com.yearsaday.qna.message.QuestionRequest
 import com.yearsaday.qna.message.QuestionResponse
-import com.yearsaday.qna.message.QuestionUpdateRequest
 import com.yearsaday.qna.repository.QuestionRepository
 import org.springframework.stereotype.Service
 
@@ -18,7 +17,7 @@ class QuestionDataService(
         return toQuestionResponse(entity)
     }
 
-    fun save(request: QuestionCreateRequest): QuestionResponse {
+    fun save(request: QuestionRequest): QuestionResponse {
         val question = Question(0, request.sentence, request.month, request.day)
         val entity = repository.save(question)
 
@@ -35,8 +34,7 @@ class QuestionDataService(
         repository.deleteById(id)
     }
 
-    fun update(id: Int, request: QuestionUpdateRequest): QuestionResponse {
-        val saved = repository.findById(id).orElseThrow()
+    fun update(id: Int, request: QuestionRequest): QuestionResponse {
         val update = Question(id, request.sentence, request.month, request.day)
         val result = repository.save(update)
 

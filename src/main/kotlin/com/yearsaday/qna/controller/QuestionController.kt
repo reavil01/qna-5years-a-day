@@ -30,17 +30,17 @@ class QuestionController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
-        @RequestBody questionCreateRequest: QuestionCreateRequest
+        @RequestBody questionRequest: QuestionRequest
     ): QuestionResponse {
-        return questionService.save(questionCreateRequest)
+        return questionService.save(questionRequest)
     }
 
     @PutMapping("/{id}")
     fun update(
         @PathVariable("id") id: Int,
-        @RequestBody questionUpdateRequest: QuestionUpdateRequest
+        @RequestBody questionRequest: QuestionRequest
     ): QuestionResponse {
-        return questionService.update(id, questionUpdateRequest)
+        return questionService.update(id, questionRequest)
     }
 
     @DeleteMapping("/{id}")
