@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.yearsaday.qna.entity.Question
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
-import com.yearsaday.qna.service.AnswerDataService
+import com.yearsaday.qna.repository.AnswerDataService
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -53,7 +53,7 @@ class AnswerControllerTest {
             now,
             now
         )
-        given(answerService.findById(1)).willReturn(answerResponse)
+        given(answerService.select(1)).willReturn(answerResponse)
 
         // when
         mock.perform(get("$API_URL/$answerId"))
@@ -61,7 +61,7 @@ class AnswerControllerTest {
             .andExpect(content().string(containsString(answerSentence)))
 
         // then
-        verify(answerService).findById(answerId)
+        verify(answerService).select(answerId)
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.yearsaday.qna.controller
 
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
-import com.yearsaday.qna.service.AnswerDataService
+import com.yearsaday.qna.repository.AnswerDataService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -16,7 +16,7 @@ class AnswerController(
 
     @GetMapping("")
     fun findAll(): List<AnswerResponse> {
-        return answerService.findAll()
+        return answerService.selectAll()
     }
 
     @PostMapping("/{questionId}")
@@ -25,7 +25,7 @@ class AnswerController(
         response: HttpServletResponse
     ): AnswerResponse? {
         val year = LocalDateTime.now().year
-        val result = answerService.findByYearAndQuestionId(year, questionId)
+        val result = answerService.selectByYearAndQuestionId(year, questionId)
 
         return result ?: let{
             response.status = HttpStatus.NO_CONTENT.value()
@@ -36,8 +36,8 @@ class AnswerController(
     @GetMapping("/{id}")
     fun findById(
         @PathVariable("id") id: Int
-    ): AnswerResponse {
-        return answerService.findById(id)
+    ): AnswerResponse? {
+        return answerService.select(id)
     }
 
     @PostMapping
