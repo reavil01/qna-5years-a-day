@@ -1,7 +1,7 @@
 package com.yearsaday.qna.controller
 
 import com.yearsaday.qna.message.*
-import com.yearsaday.qna.service.QuestionDataService
+import com.yearsaday.qna.repository.QuestionDataService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -17,14 +17,14 @@ class QuestionController(
     ): QuestionResponse {
         val month = LocalDateTime.now().monthValue
         val day = LocalDateTime.now().dayOfMonth
-        return questionService.findByMonthAndDays(month, day)
+        return questionService.selectByMonthAndDays(month, day)
     }
 
     @GetMapping("/{id}")
     fun findById(
         @PathVariable("id") id: Int
     ): QuestionResponse {
-        return questionService.findById(id)
+        return questionService.select(id)
     }
 
     @PostMapping

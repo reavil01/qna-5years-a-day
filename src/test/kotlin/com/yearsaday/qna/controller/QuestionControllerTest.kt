@@ -3,7 +3,7 @@ package com.yearsaday.qna.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yearsaday.qna.message.QuestionRequest
 import com.yearsaday.qna.message.QuestionResponse
-import com.yearsaday.qna.service.QuestionDataService
+import com.yearsaday.qna.repository.QuestionDataService
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -37,7 +37,7 @@ class QuestionControllerTest {
         // given
         val questionResponse = getQuestionResponse(QUESTION_ID, QUESTION_SENTENCE)
 
-        given(questionService.findById(QUESTION_ID))
+        given(questionService.select(QUESTION_ID))
             .willReturn(questionResponse)
 
         // when
@@ -46,7 +46,7 @@ class QuestionControllerTest {
             .andExpect(content().string(containsString(QUESTION_SENTENCE)))
 
         // then
-        verify(questionService).findById(QUESTION_ID)
+        verify(questionService).select(QUESTION_ID)
     }
 
     @Test

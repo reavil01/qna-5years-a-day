@@ -1,7 +1,8 @@
 package com.yearsaday.qna.service
 
 import com.yearsaday.qna.message.QuestionRequest
-import com.yearsaday.qna.repository.QuestionRepository
+import com.yearsaday.qna.repository.QuestionDataService
+import com.yearsaday.qna.spring.repository.QuestionRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -46,7 +47,7 @@ class QuestionDataServiceTest {
         assertThat(repository.findAll().size).isEqualTo(1)
 
         // when
-        val result = service.findById(saved.id)
+        val result = service.select(saved.id)
 
         // then
         assertThat(result.id).isEqualTo(saved.id)

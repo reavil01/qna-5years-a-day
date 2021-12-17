@@ -1,4 +1,4 @@
-package com.yearsaday.qna.repository
+package com.yearsaday.qna.spring.repository
 
 import com.yearsaday.qna.entity.Question
 import org.springframework.data.jpa.repository.JpaRepository

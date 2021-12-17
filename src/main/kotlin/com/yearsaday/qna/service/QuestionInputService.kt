@@ -1,6 +1,7 @@
 package com.yearsaday.qna.service
 
 import com.yearsaday.qna.message.QuestionRequest
+import com.yearsaday.qna.repository.QuestionDataService
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component

@@ -2,6 +2,8 @@ package com.yearsaday.qna.repository
 
 import com.yearsaday.qna.entity.Answer
 import com.yearsaday.qna.entity.Question
+import com.yearsaday.qna.spring.repository.AnswerRepository
+import com.yearsaday.qna.spring.repository.QuestionRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
