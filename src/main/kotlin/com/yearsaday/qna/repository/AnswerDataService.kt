@@ -2,7 +2,6 @@ package com.yearsaday.qna.repository
 
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
-import java.time.Year
 
 interface AnswerDataService {
 
@@ -16,7 +15,7 @@ interface AnswerDataService {
 
     fun selectAll(): List<AnswerResponse>
 
-    fun selectByYearAndQuestionId(year: Int, questionId: Int): AnswerResponse?
+    fun getTodayAnswer(questionId: Int): AnswerResponse?
 
     fun preventDuplicationSave(request: AnswerRequest): AnswerResponse
 

@@ -24,8 +24,7 @@ class AnswerController(
         @PathVariable("questionId") questionId: Int,
         response: HttpServletResponse
     ): AnswerResponse? {
-        val year = LocalDateTime.now().year
-        val result = answerService.selectByYearAndQuestionId(year, questionId)
+        val result = answerService.getTodayAnswer(questionId)
 
         return result ?: let{
             response.status = HttpStatus.NO_CONTENT.value()

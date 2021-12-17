@@ -1,7 +1,7 @@
 package com.yearsaday.qna.repository
 
-import com.yearsaday.qna.entity.Answer
-import com.yearsaday.qna.entity.Question
+import com.yearsaday.qna.spring.entity.AnswerEntity
+import com.yearsaday.qna.spring.entity.QuestionEntity
 import com.yearsaday.qna.spring.repository.AnswerRepository
 import com.yearsaday.qna.spring.repository.QuestionRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -30,13 +30,13 @@ class QuestionAnswerMappingTest {
     @Test
     fun mappingTest() {
         // given
-        val question = Question(
+        val question = QuestionEntity(
             0,
             "질문1",
             LocalDateTime.now().monthValue,
             LocalDateTime.now().dayOfMonth
         )
-        val answer = Answer(0, "답변1", question)
+        val answer = AnswerEntity(0, "답변1", question)
 
         // when
         val savedQuestion = questionRepository.save(question)
@@ -50,13 +50,13 @@ class QuestionAnswerMappingTest {
     @Test
     fun mappingDeleteTest() {
         // given
-        val question = Question(
+        val question = QuestionEntity(
             0,
             "질문1",
             LocalDateTime.now().monthValue,
             LocalDateTime.now().dayOfMonth
         )
-        val answer = Answer(0, "답변1", question)
+        val answer = AnswerEntity(0, "답변1", question)
         questionRepository.save(question)
         val savedAnswer = answerRepository.save(answer)
 

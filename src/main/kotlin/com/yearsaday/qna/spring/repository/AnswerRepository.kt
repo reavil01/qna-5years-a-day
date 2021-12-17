@@ -1,12 +1,12 @@
 package com.yearsaday.qna.spring.repository
 
-import com.yearsaday.qna.entity.Answer
+import com.yearsaday.qna.spring.entity.AnswerEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AnswerRepository: JpaRepository<Answer, Int> {
+interface AnswerRepository: JpaRepository<AnswerEntity, Int> {
 
-    fun findByYearAndQuestionId(year: Int, questionId: Int): Answer?
+    fun findByYearAndQuestionId(year: Int, questionId: Int): AnswerEntity?
 
 }

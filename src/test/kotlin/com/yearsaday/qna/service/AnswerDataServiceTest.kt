@@ -1,6 +1,6 @@
 package com.yearsaday.qna.service
 
-import com.yearsaday.qna.entity.Question
+import com.yearsaday.qna.spring.entity.QuestionEntity
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.repository.AnswerDataService
 import com.yearsaday.qna.spring.repository.AnswerRepository
@@ -24,14 +24,14 @@ class AnswerDataServiceTest {
     private lateinit var questionRepository: QuestionRepository
 
     val ANSWER = "답변1"
-    lateinit var QUESTION: Question
+    lateinit var QUESTION: QuestionEntity
 
     @BeforeEach
     fun cleanUp() {
         repository.deleteAll()
         questionRepository.deleteAll()
 
-        val question = Question(
+        val question = QuestionEntity(
             0,
             "질문1",
             LocalDateTime.now().monthValue,
@@ -80,7 +80,7 @@ class AnswerDataServiceTest {
 
         val updateAnswer = "답변2"
         val updateSentence = "질문2"
-        val question = Question(
+        val question = QuestionEntity(
             0,
             updateSentence,
             LocalDateTime.now().monthValue,

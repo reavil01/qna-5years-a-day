@@ -1,7 +1,7 @@
 package com.yearsaday.qna.repository
 
-import com.yearsaday.qna.entity.Answer
-import com.yearsaday.qna.entity.Question
+import com.yearsaday.qna.spring.entity.AnswerEntity
+import com.yearsaday.qna.spring.entity.QuestionEntity
 import com.yearsaday.qna.spring.repository.AnswerRepository
 import com.yearsaday.qna.spring.repository.QuestionRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -21,7 +21,7 @@ class AnswerRepositoryTest {
 
     val ANSWER = "답변1"
     val QUESTION by lazy {
-        val question = Question(
+        val question = QuestionEntity(
             0,
             "질문1",
             LocalDateTime.now().monthValue,
@@ -59,7 +59,7 @@ class AnswerRepositoryTest {
 
         // when
         val result = repository.save(answer)
-        val update = Answer(result.id, "바뀐 답", result.question)
+        val update = AnswerEntity(result.id, "바뀐 답", result.question)
         val updated = repository.save(update)
         repository.flush()
 
@@ -76,7 +76,7 @@ class AnswerRepositoryTest {
         }
     }
 
-    private fun makeAnswer(): Answer {
-        return Answer(0, ANSWER, QUESTION)
+    private fun makeAnswer(): AnswerEntity {
+        return AnswerEntity(0, ANSWER, QUESTION)
     }
 }

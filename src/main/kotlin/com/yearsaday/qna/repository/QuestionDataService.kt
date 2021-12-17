@@ -13,6 +13,6 @@ interface QuestionDataService {
 
     fun select(id: Int): QuestionResponse
 
-    fun selectByMonthAndDays(month: Int, day: Int): QuestionResponse
+    fun getTodayQuestion(): QuestionResponse
 
 }

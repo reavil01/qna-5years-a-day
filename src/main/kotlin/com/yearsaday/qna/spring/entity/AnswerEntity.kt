@@ -1,10 +1,10 @@
-package com.yearsaday.qna.entity
+package com.yearsaday.qna.spring.entity
 
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-data class Answer(
+data class AnswerEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -13,7 +13,7 @@ data class Answer(
     val answer: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val question: Question,
+    val question: QuestionEntity,
 
     val year: Int = LocalDateTime.now().year,
 ) : BaseTime()

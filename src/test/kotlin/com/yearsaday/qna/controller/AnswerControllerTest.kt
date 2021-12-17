@@ -1,7 +1,7 @@
 package com.yearsaday.qna.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.yearsaday.qna.entity.Question
+import com.yearsaday.qna.spring.entity.QuestionEntity
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
 import com.yearsaday.qna.repository.AnswerDataService
@@ -32,7 +32,7 @@ class AnswerControllerTest {
 
     private val API_URL = "/answers"
 
-    private val question = Question(
+    private val question = QuestionEntity(
         1,
         "질문1",
         LocalDateTime.now().monthValue,

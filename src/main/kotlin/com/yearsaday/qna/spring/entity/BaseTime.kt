@@ -1,4 +1,4 @@
-package com.yearsaday.qna.entity
+package com.yearsaday.qna.spring.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime

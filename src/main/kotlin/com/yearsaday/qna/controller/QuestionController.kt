@@ -15,9 +15,7 @@ class QuestionController(
     @GetMapping("/")
     fun getTodayQuestion(
     ): QuestionResponse {
-        val month = LocalDateTime.now().monthValue
-        val day = LocalDateTime.now().dayOfMonth
-        return questionService.selectByMonthAndDays(month, day)
+        return questionService.getTodayQuestion()
     }
 
     @GetMapping("/{id}")

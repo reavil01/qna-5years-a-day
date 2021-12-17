@@ -1,9 +1,9 @@
-package com.yearsaday.qna.entity
+package com.yearsaday.qna.spring.entity
 
 import javax.persistence.*
 
 @Entity
-data class Question(
+data class QuestionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
