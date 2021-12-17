@@ -19,7 +19,12 @@ class AnswerRepositoryTest {
 
     val ANSWER = "답변1"
     val QUESTION by lazy {
-        val question = Question(0, "질문1")
+        val question = Question(
+            0,
+            "질문1",
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth
+        )
         questionRepository.save(question)
     }
 

@@ -1,9 +1,8 @@
 package com.yearsaday.qna.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.yearsaday.qna.message.QuestionCreateRequest
+import com.yearsaday.qna.message.QuestionRequest
 import com.yearsaday.qna.message.QuestionResponse
-import com.yearsaday.qna.message.QuestionUpdateRequest
 import com.yearsaday.qna.service.QuestionDataService
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
@@ -16,6 +15,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import java.time.LocalDateTime
 
 @WebMvcTest(QuestionController::class)
 class QuestionControllerTest {
@@ -52,8 +52,10 @@ class QuestionControllerTest {
     @Test
     fun createTest() {
         // given
-        val questionCreateRequest = QuestionCreateRequest(
-            QUESTION_SENTENCE
+        val questionCreateRequest = QuestionRequest(
+            QUESTION_SENTENCE,
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth
         )
         val json = objectMapper.writeValueAsString(questionCreateRequest)
 
@@ -63,7 +65,7 @@ class QuestionControllerTest {
 
         // when
         mock.perform(
-            post("$API_URL")
+            post(API_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
         ).andExpect(status().isCreated)
@@ -76,8 +78,10 @@ class QuestionControllerTest {
     @Test
     fun updateTest() {
         // given
-        val questionUpdateRequest = QuestionUpdateRequest(
-            QUESTION_SENTENCE
+        val questionUpdateRequest = QuestionRequest(
+            QUESTION_SENTENCE,
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth
         )
         val json = objectMapper.writeValueAsString(questionUpdateRequest)
 

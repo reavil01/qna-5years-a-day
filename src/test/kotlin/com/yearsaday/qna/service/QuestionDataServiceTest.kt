@@ -1,13 +1,13 @@
 package com.yearsaday.qna.service
 
-import com.yearsaday.qna.message.QuestionCreateRequest
-import com.yearsaday.qna.message.QuestionUpdateRequest
+import com.yearsaday.qna.message.QuestionRequest
 import com.yearsaday.qna.repository.QuestionRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 class QuestionDataServiceTest {
@@ -60,7 +60,11 @@ class QuestionDataServiceTest {
         val saved = service.save(request)
         assertThat(repository.findAll().size).isEqualTo(1)
         val updateSentence = "질문2"
-        val updateRequest = QuestionUpdateRequest(updateSentence)
+        val updateRequest = QuestionRequest(
+            updateSentence,
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth
+        )
 
         // when
         val result = service.update(saved.id, updateRequest)
@@ -84,7 +88,11 @@ class QuestionDataServiceTest {
         assertThat(repository.findAll().size).isEqualTo(0)
     }
 
-    private fun makeQuestionRequest(): QuestionCreateRequest {
-        return QuestionCreateRequest(SENTENCE)
+    private fun makeQuestionRequest(): QuestionRequest {
+        return QuestionRequest(
+            SENTENCE,
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth
+        )
     }
 }

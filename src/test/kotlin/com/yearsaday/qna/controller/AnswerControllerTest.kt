@@ -2,9 +2,8 @@ package com.yearsaday.qna.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yearsaday.qna.entity.Question
-import com.yearsaday.qna.message.AnswerCreateRequest
+import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
-import com.yearsaday.qna.message.AnswerUpdateRequest
 import com.yearsaday.qna.service.AnswerDataService
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
@@ -33,19 +32,26 @@ class AnswerControllerTest {
 
     private val API_URL = "/answers"
 
-    private val question = Question(1, "질문1")
+    private val question = Question(
+        1,
+        "질문1",
+        LocalDateTime.now().monthValue,
+        LocalDateTime.now().dayOfMonth
+    )
 
     @Test
     fun findAnswerTest() {
         // given
+        val now = LocalDateTime.now()
+        val year = now.year
         val answerSentence = "답변1"
         val answerId = 1
         val answerResponse = AnswerResponse(
             answerId,
             answerSentence,
-            question,
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            year,
+            now,
+            now
         )
         given(answerService.findById(1)).willReturn(answerResponse)
 
@@ -61,7 +67,7 @@ class AnswerControllerTest {
     @Test
     fun createAnswerTest() {
         // given
-        val answerCreateRequest = AnswerCreateRequest(
+        val answerCreateRequest = AnswerRequest(
             "답변1",
             question,
         )
@@ -69,13 +75,13 @@ class AnswerControllerTest {
 
         // when
         mock.perform(
-            post("$API_URL")
+            post(API_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
         ).andExpect(status().isCreated)
 
         // then
-        verify(answerService).save(answerCreateRequest)
+        verify(answerService).preventDuplicationSave(answerCreateRequest)
     }
 
     @Test
@@ -83,7 +89,7 @@ class AnswerControllerTest {
         // given
         val answerSentence = "답변1"
         val updateId = 1
-        val answerUpdateRequest = AnswerUpdateRequest(
+        val answerUpdateRequest = AnswerRequest(
             answerSentence,
             question
         )

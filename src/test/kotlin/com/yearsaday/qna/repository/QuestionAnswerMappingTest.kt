@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.web.WebAppConfiguration
+import java.time.LocalDateTime
 
 @WebAppConfiguration
 @DataJpaTest
@@ -27,7 +28,12 @@ class QuestionAnswerMappingTest {
     @Test
     fun mappingTest() {
         // given
-        val question = Question(0, "질문1")
+        val question = Question(
+            0,
+            "질문1",
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth
+        )
         val answer = Answer(0, "답변1", question)
 
         // when
@@ -42,9 +48,14 @@ class QuestionAnswerMappingTest {
     @Test
     fun mappingDeleteTest() {
         // given
-        val question = Question(0, "질문1")
+        val question = Question(
+            0,
+            "질문1",
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth
+        )
         val answer = Answer(0, "답변1", question)
-        val savedQuestion = questionRepository.save(question)
+        questionRepository.save(question)
         val savedAnswer = answerRepository.save(answer)
 
         // when
