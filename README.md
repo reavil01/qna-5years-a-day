@@ -11,8 +11,9 @@ This is your journal of your life.
 - Show answers which you are written
 - Sort answers by year of writing
 - Insert question from question.txt to Database when start server
+
 # Snapshot
-![img.png](snapshot/img.png)
+<img src="snapshot/img.png" alt="img.png" style="width: 60%;" />
 
 # Architecture
 ![architecture.png](snapshot/architecture.png)
