@@ -3,6 +3,7 @@ package com.yearsaday.qna.spring.entity
 import javax.persistence.*
 
 @Entity
+@Table(name = "question")
 data class QuestionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

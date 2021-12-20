@@ -81,7 +81,7 @@ class AnswerControllerTest {
         ).andExpect(status().isCreated)
 
         // then
-        verify(answerService).preventDuplicationSave(answerCreateRequest)
+        verify(answerService).create(answerCreateRequest)
     }
 
     @Test

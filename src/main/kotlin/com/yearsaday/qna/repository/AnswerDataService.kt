@@ -5,7 +5,7 @@ import com.yearsaday.qna.message.AnswerResponse
 
 interface AnswerDataService {
 
-    fun save(request: AnswerRequest): AnswerResponse
+    fun create(request: AnswerRequest): AnswerResponse
 
     fun delete(id: Int)
 
@@ -16,7 +16,5 @@ interface AnswerDataService {
     fun selectAll(): List<AnswerResponse>
 
     fun getTodayAnswer(questionId: Int): AnswerResponse?
-
-    fun preventDuplicationSave(request: AnswerRequest): AnswerResponse
 
 }

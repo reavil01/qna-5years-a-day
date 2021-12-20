@@ -13,7 +13,7 @@ class AnswerSpringDataService (
     val repository: AnswerRepository
 ): AnswerDataService {
 
-    override fun save(request: AnswerRequest): AnswerResponse {
+    override fun create(request: AnswerRequest): AnswerResponse {
         val entity = AnswerEntity(0, request.answer, request.question)
         val result = repository.save(entity)
 
@@ -50,17 +50,6 @@ class AnswerSpringDataService (
         val entity = repository.findByYearAndQuestionId(year, questionId)
 
         return entity?.let { toAnswerResponse(it) }
-    }
-
-    override fun preventDuplicationSave(request: AnswerRequest): AnswerResponse {
-        val year = LocalDateTime.now().year
-        val todayEntity = repository.findByYearAndQuestionId(year, request.question.id)
-        val savedId = todayEntity?.id ?: 0
-
-        return when(savedId) {
-            0 -> save(request)
-            else -> update(savedId, request)
-        }
     }
 
     private fun toAnswerResponse(entity: AnswerEntity): AnswerResponse {
