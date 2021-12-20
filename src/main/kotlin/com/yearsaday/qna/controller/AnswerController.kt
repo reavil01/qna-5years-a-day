@@ -2,63 +2,19 @@ package com.yearsaday.qna.controller
 
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
-import com.yearsaday.qna.repository.AnswerDataService
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
-import javax.servlet.http.HttpServletResponse
 
-@RestController
-@RequestMapping("/answers")
-class AnswerController(
-    val answerService: AnswerDataService
-) {
+interface AnswerController {
 
-    @GetMapping("")
-    fun findAll(): List<AnswerResponse> {
-        return answerService.selectAll()
-    }
+    fun save(request: AnswerRequest): AnswerResponse
 
-    @PostMapping("/{questionId}")
-    fun getTodayAnswer(
-        @PathVariable("questionId") questionId: Int,
-        response: HttpServletResponse
-    ): AnswerResponse? {
-        val result = answerService.getTodayAnswer(questionId)
+    fun delete(id: Int)
 
-        return result ?: let{
-            response.status = HttpStatus.NO_CONTENT.value()
-            null
-        }
-    }
+    fun update(id: Int, request: AnswerRequest): AnswerResponse
 
-    @GetMapping("/{id}")
-    fun findById(
-        @PathVariable("id") id: Int
-    ): AnswerResponse? {
-        return answerService.select(id)
-    }
+    fun select(id: Int): AnswerResponse?
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    fun create(
-        @RequestBody answerRequest: AnswerRequest
-    ): AnswerResponse {
-        return answerService.preventDuplicationSave(answerRequest)
-    }
+    fun selectAll(): List<AnswerResponse>
 
-    @PutMapping("/{id}")
-    fun update(
-        @PathVariable("id") id: Int,
-        @RequestBody answerRequest: AnswerRequest
-    ): AnswerResponse {
-        return answerService.update(id, answerRequest)
-    }
+    fun getTodayAnswer(id: Int): AnswerResponse?
 
-    @DeleteMapping("/{id}")
-    fun delete(
-        @PathVariable("id") id: Int
-    ) {
-        answerService.delete(id)
-    }
 }

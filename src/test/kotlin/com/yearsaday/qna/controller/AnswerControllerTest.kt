@@ -5,6 +5,7 @@ import com.yearsaday.qna.spring.entity.QuestionEntity
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
 import com.yearsaday.qna.repository.AnswerDataService
+import com.yearsaday.qna.spring.controller.AnswerSpringController
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -19,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDateTime
 
-@WebMvcTest(AnswerController::class)
+@WebMvcTest(AnswerSpringController::class)
 class AnswerControllerTest {
     @Autowired
     private lateinit var mock: MockMvc
