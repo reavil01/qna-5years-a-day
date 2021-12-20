@@ -2,19 +2,40 @@ package com.yearsaday.qna.controller
 
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
+import com.yearsaday.qna.repository.AnswerDataService
 
-interface AnswerController {
+class AnswerController(
+    private val answerDataService: AnswerDataService
+) {
 
-    fun save(request: AnswerRequest): AnswerResponse
+    // prevent saving the duplication answer of same year
+    fun save(request: AnswerRequest): AnswerResponse {
+        val todayEntity = answerDataService.getTodayAnswer(request.question.id)
 
-    fun delete(id: Int)
+        return when(val savedId = todayEntity?.id ?: 0) {
+            0 -> answerDataService.create(request)
+            else -> update(savedId, request)
+        }
+    }
 
-    fun update(id: Int, request: AnswerRequest): AnswerResponse
+    fun delete(id: Int) {
+        return answerDataService.delete(id)
+    }
 
-    fun select(id: Int): AnswerResponse?
+    fun update(id: Int, request: AnswerRequest): AnswerResponse {
+        return answerDataService.update(id, request)
+    }
 
-    fun selectAll(): List<AnswerResponse>
+    fun select(id: Int): AnswerResponse? {
+        return answerDataService.select(id)
+    }
 
-    fun getTodayAnswer(id: Int): AnswerResponse?
+    fun selectAll(): List<AnswerResponse> {
+        return answerDataService.selectAll()
+    }
+
+    fun getTodayAnswer(id: Int): AnswerResponse? {
+        return answerDataService.getTodayAnswer(id)
+    }
 
 }

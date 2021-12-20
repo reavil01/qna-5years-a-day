@@ -1,7 +1,6 @@
 package com.yearsaday.qna.spring.controller
 
 import com.yearsaday.qna.controller.AnswerController
-import com.yearsaday.qna.controller.AnswerControllerImpl
 import com.yearsaday.qna.message.AnswerRequest
 import com.yearsaday.qna.message.AnswerResponse
 import com.yearsaday.qna.repository.AnswerDataService
@@ -15,7 +14,7 @@ class AnswerSpringController(
     answerService: AnswerDataService,
 ) {
 
-    val answerControllerImpl: AnswerController = AnswerControllerImpl(answerService)
+    val answerControllerImpl = AnswerController(answerService)
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
