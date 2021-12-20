@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.yearsaday.qna.message.QuestionRequest
 import com.yearsaday.qna.message.QuestionResponse
 import com.yearsaday.qna.repository.QuestionDataService
+import com.yearsaday.qna.spring.controller.QuestionSpringController
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.LocalDateTime
 
-@WebMvcTest(QuestionController::class)
+@WebMvcTest(QuestionSpringController::class)
 class QuestionControllerTest {
     @Autowired
     private lateinit var mock: MockMvc
