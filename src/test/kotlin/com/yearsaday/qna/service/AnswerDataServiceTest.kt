@@ -46,7 +46,7 @@ class AnswerDataServiceTest {
         val request = makeAnswerRequest()
 
         // when
-        val result = service.save(request)
+        val result = service.create(request)
 
         // then
         assertThat(repository.findAll().size).isEqualTo(1)
@@ -59,7 +59,7 @@ class AnswerDataServiceTest {
     fun findAnswerTest() {
         // given
         val request = makeAnswerRequest()
-        val saved = service.save(request)
+        val saved = service.create(request)
         assertThat(repository.findAll().size).isEqualTo(1)
 
         // when
@@ -75,7 +75,7 @@ class AnswerDataServiceTest {
     fun updateAnswerTest() {
         // given
         val request = makeAnswerRequest()
-        val saved = service.save(request)
+        val saved = service.create(request)
         assertThat(repository.findAll().size).isEqualTo(1)
 
         val updateAnswer = "답변2"
@@ -103,7 +103,7 @@ class AnswerDataServiceTest {
     fun deleteAnswerTest() {
         // given
         val request = makeAnswerRequest()
-        val saved = service.save(request)
+        val saved = service.create(request)
         assertThat(repository.findAll().size).isEqualTo(1)
 
         // when
