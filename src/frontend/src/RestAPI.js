@@ -31,8 +31,8 @@ export const getTodayAnswer = async(questionId) => {
       });
 }
 
-export const getAllAnswers = async() => {
-  return await axios.get(`${ANSWER_API_PATH}`)
+export const getAllAnswersByQuestionId = async(quesitonId) => {
+  return await axios.get(`${ANSWER_API_PATH}?qId=${quesitonId}`)
     .then((res) => {
       return res
     })

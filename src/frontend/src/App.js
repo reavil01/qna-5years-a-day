@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import Question from './element/Question';
@@ -6,8 +5,10 @@ import AnswerInput from './element/AnswerInput';
 import AnswerTable from './element/AnswerTable';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { getTodayQuestion, getTodayAnswer, getAllAnswers,
-  createAnswer, updateAnswer } from './RestAPI';
+import {
+  getTodayQuestion, getTodayAnswer,
+  createAnswer, updateAnswer, getAllAnswersByQuestionId
+} from './RestAPI';
 
 const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
@@ -41,8 +42,8 @@ export default function App() {
     return todayQuestionRes.data
   }
 
-  const loadAllAnswers = async() => {
-    let allAnswersRes = await getAllAnswers()
+  const loadAllAnswersByQuestionId = async(qId) => {
+    let allAnswersRes = await getAllAnswersByQuestionId(qId)
     setAllAnswers(allAnswersRes.data)
   }
 
@@ -59,13 +60,13 @@ export default function App() {
       let res = await createAnswer(body)
       if(res.status === 201) {
         alert("저장 성공!");
-        loadAllAnswers();
+        loadAllAnswersByQuestionId(questionEntity.id);
       } else alert("저장 실패!")
     } else {
       let res = await updateAnswer(answerEntity.id, body)
       if (res.status === 200) {
         alert("업데이트 성공!");
-        loadAllAnswers();
+        loadAllAnswersByQuestionId(questionEntity.id);
       } else alert("업데이트 실패!")
     }
   }
@@ -78,13 +79,12 @@ export default function App() {
         setAnswerInputValue(a.answer);
       });
     });
-    loadAllAnswers();
+    loadAllAnswersByQuestionId(questionEntity.id);
   }, []);
 
   return(
     <div className="App">
     <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
       <div sx={{ width: '600px'}}>
         <div sx={{ width: '100%' }}>
         <p>오늘의 질문!</p>
