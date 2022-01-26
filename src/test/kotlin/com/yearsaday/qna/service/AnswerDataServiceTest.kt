@@ -128,6 +128,36 @@ class AnswerDataServiceTest {
     }
 
     @Test
+    fun selectAllByQuestionIdTest() {
+        // given
+        val questionId = 1
+        given(repository.findAllByQuestionId(questionId))
+            .willReturn(listOf(entity, entity, entity))
+
+        // when
+        val result = service.selectAllByQuestionId(questionId)
+
+        // then
+        verify(repository).findAllByQuestionId(questionId)
+        assertThat(result).isEqualTo(listOf(response, response, response))
+    }
+
+    @Test
+    fun selectAllByQuestionIdWhenAnswerIsNotExist() {
+        // given
+        val questionId = 1
+        given(repository.findAllByQuestionId(questionId))
+            .willReturn(listOf())
+
+        // when
+        val result = service.selectAllByQuestionId(questionId)
+
+        // then
+        verify(repository).findAllByQuestionId(questionId)
+        assertThat(result.size).isEqualTo(0)
+    }
+
+    @Test
     fun getTodayAnswerTest() {
         // given
         given(repository.findByYearAndQuestionId(response.year, request.question.id))

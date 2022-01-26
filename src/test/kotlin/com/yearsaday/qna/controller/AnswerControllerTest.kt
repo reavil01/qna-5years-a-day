@@ -37,7 +37,7 @@ class AnswerControllerTest {
         1,
         "질문1",
         LocalDateTime.now().monthValue,
-        LocalDateTime.now().dayOfMonth
+        LocalDateTime.now().dayOfMonth,
     )
 
     @Test
@@ -52,7 +52,7 @@ class AnswerControllerTest {
             answerSentence,
             year,
             now,
-            now
+            now,
         )
         given(answerService.select(1)).willReturn(answerResponse)
 
@@ -83,6 +83,37 @@ class AnswerControllerTest {
 
         // then
         verify(answerService).create(answerCreateRequest)
+    }
+
+    @Test
+    fun createAnswerWhenExistId() {
+        // given
+        val savedId = 1
+        val answerCreateRequest = AnswerRequest(
+            "답변1",
+            question,
+        )
+        val json = objectMapper.writeValueAsString(answerCreateRequest)
+
+        val answerResponse = AnswerResponse(
+            savedId,
+            "수정전",
+            2022,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+        )
+        given(answerService.getTodayAnswer(question.id))
+            .willReturn(answerResponse)
+
+        // when
+        mock.perform(
+            post(API_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+        ).andExpect(status().isCreated)
+
+        // then
+        verify(answerService).update(savedId, answerCreateRequest)
     }
 
     @Test
@@ -118,5 +149,55 @@ class AnswerControllerTest {
 
         // then
         verify(answerService).delete(deleteId)
+    }
+
+    @Test
+    fun selectAllByQuestionIdTest() {
+        // given
+        val questionId = 1
+
+        // when
+        mock.perform(get("$API_URL?qId=$questionId"))
+            .andExpect(status().isOk)
+
+        // then
+        verify(answerService).selectAllByQuestionId(questionId)
+    }
+
+    @Test
+    fun getTodayAnswerTest() {
+        // given
+        val todayQuestionId = question.id
+        val todayAnswer = AnswerResponse(
+            1,
+            "오늘",
+            2022,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+        )
+        given(answerService.getTodayAnswer(todayQuestionId)).willReturn(todayAnswer)
+
+        // when
+        mock.perform(
+            post("$API_URL/$todayQuestionId")
+        )
+            .andExpect(status().isOk)
+
+        // then
+        verify(answerService).getTodayAnswer(todayQuestionId)
+    }
+
+    @Test
+    fun getTodayAnswerWhenNotExistQuestionTest() {
+        // given
+        val todayQuestionId = question.id
+
+        // when
+        mock.perform(
+            post("$API_URL/$todayQuestionId")
+        ).andExpect(status().isNoContent)
+
+        // then
+        verify(answerService).getTodayAnswer(todayQuestionId)
     }
 }
