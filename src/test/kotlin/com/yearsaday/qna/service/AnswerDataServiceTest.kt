@@ -2,119 +2,182 @@ package com.yearsaday.qna.service
 
 import com.yearsaday.qna.spring.entity.QuestionEntity
 import com.yearsaday.qna.message.AnswerRequest
+import com.yearsaday.qna.message.AnswerResponse
 import com.yearsaday.qna.repository.AnswerDataService
+import com.yearsaday.qna.spring.entity.AnswerEntity
 import com.yearsaday.qna.spring.repository.AnswerRepository
-import com.yearsaday.qna.spring.repository.QuestionRepository
+import com.yearsaday.qna.spring.service.AnswerSpringDataService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+import org.junit.jupiter.api.assertThrows
+import org.mockito.BDDMockito.*
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 import java.time.LocalDateTime
+import java.util.*
 
-@SpringBootTest
 class AnswerDataServiceTest {
-    @Autowired
     private lateinit var service: AnswerDataService
 
-    @Autowired
+    @Mock
     private lateinit var repository: AnswerRepository
 
-    @Autowired
-    private lateinit var questionRepository: QuestionRepository
-
-    val ANSWER = "답변1"
-    lateinit var QUESTION: QuestionEntity
+    private val request = makeAnswerRequest()
+    private val entity = request.toEntity()
+    private val response = entity.toResponse()
 
     @BeforeEach
-    fun cleanUp() {
-        repository.deleteAll()
-        questionRepository.deleteAll()
-
-        val question = QuestionEntity(
-            0,
-            "질문1",
-            LocalDateTime.now().monthValue,
-            LocalDateTime.now().dayOfMonth
-        )
-        QUESTION = questionRepository.save(question)
+    fun init() {
+        MockitoAnnotations.openMocks(this)
+        service = AnswerSpringDataService(repository)
     }
 
     @Test
     fun saveAnswerTest() {
         // given
-        val request = makeAnswerRequest()
+        given(repository.save(entity))
+            .willReturn(entity)
 
         // when
         val result = service.create(request)
 
         // then
-        assertThat(repository.findAll().size).isEqualTo(1)
-        assertThat(result.id).isGreaterThan(0)
-        assertThat(result.answer).isEqualTo(request.answer)
-//        assertThat(result.question.id).isEqualTo(QUESTION.id)
+        verify(repository).save(entity)
+        assertThat(result).isEqualTo(response)
     }
 
     @Test
     fun findAnswerTest() {
         // given
-        val request = makeAnswerRequest()
-        val saved = service.create(request)
-        assertThat(repository.findAll().size).isEqualTo(1)
+        val id = 1
+        given(repository.findById(id))
+            .willReturn(Optional.of(entity))
 
         // when
-        val result = service.select(saved.id)
+        val answer = service.select(id)
 
         // then
-        assertThat(result?.id).isEqualTo(saved.id)
-        assertThat(result?.answer).isEqualTo(request.answer)
-//        assertThat(result.question.id).isEqualTo(QUESTION.id)
+        verify(repository).findById(id)
+        assertThat(answer).isEqualTo(response)
+    }
+
+    @Test
+    fun findAnswerWhenAnswerIsNotExist() {
+        assertThrows<NoSuchElementException> {
+            // given
+            val id = 1
+            given(repository.findById(id))
+                .willReturn(Optional.empty())
+
+            // when
+            service.select(id)
+        }
     }
 
     @Test
     fun updateAnswerTest() {
         // given
-        val request = makeAnswerRequest()
-        val saved = service.create(request)
-        assertThat(repository.findAll().size).isEqualTo(1)
-
-        val updateAnswer = "답변2"
-        val updateSentence = "질문2"
-        val question = QuestionEntity(
-            0,
-            updateSentence,
-            LocalDateTime.now().monthValue,
-            LocalDateTime.now().dayOfMonth
+        val updateRequest = AnswerRequest(
+            "수정",
+            request.question
         )
-        val updateQuestion = questionRepository.save(question)
-        val updateRequest = AnswerRequest(updateAnswer, updateQuestion)
+        val updatedEntity = updateRequest.toEntity()
+        val updatedResponse = updatedEntity.toResponse()
+
+        given(repository.findById(entity.id))
+            .willReturn(Optional.of(entity))
+        given(repository.save(updatedEntity))
+            .willReturn(updatedEntity)
 
         // when
-        val result = service.update(saved.id, updateRequest)
+        val result = service.update(entity.id, updateRequest)
 
         // then
-        assertThat(repository.findAll().size).isEqualTo(1)
-        assertThat(result.answer).isEqualTo(updateAnswer)
-//        assertThat(result.question.id).isEqualTo(updateQuestion.id)
-//        assertThat(result.question.sentence).isEqualTo(updateSentence)
+        verify(repository).findById(entity.id)
+        verify(repository).save(updatedEntity)
+        assertThat(result).isEqualTo(updatedResponse)
+    }
+
+    @Test
+    fun updateAnswerWhenPreviousAnswerIsNotExist() {
+        assertThrows<NoSuchElementException> {
+            // given
+            val updateRequest = AnswerRequest(
+                "수정",
+                request.question
+            )
+
+            given(repository.findById(entity.id))
+                .willReturn(Optional.empty())
+
+            // when
+            service.update(entity.id, updateRequest)
+        }
     }
 
     @Test
     fun deleteAnswerTest() {
         // given
-        val request = makeAnswerRequest()
-        val saved = service.create(request)
-        assertThat(repository.findAll().size).isEqualTo(1)
 
         // when
-        service.delete(saved.id)
+        service.delete(entity.id)
 
         // then
-        assertThat(repository.findAll().size).isEqualTo(0)
+        verify(repository).deleteById(entity.id)
+    }
+
+    @Test
+    fun getTodayAnswerTest() {
+        // given
+        given(repository.findByYearAndQuestionId(response.year, request.question.id))
+            .willReturn(entity)
+
+        // when
+        val result = service.getTodayAnswer(request.question.id)
+
+        // then
+        verify(repository).findByYearAndQuestionId(response.year, request.question.id)
+        assertThat(result).isEqualTo(response)
+    }
+
+    @Test
+    fun getTodayAnswerWhenQuestionIsNotExist() {
+        // given
+        given(repository.findByYearAndQuestionId(response.year, request.question.id))
+            .willReturn(null)
+
+        // when
+        val result = service.getTodayAnswer(request.question.id)
+
+        // then
+        verify(repository).findByYearAndQuestionId(LocalDateTime.now().year, request.question.id)
+        assertThat(result).isNull()
     }
 
     private fun makeAnswerRequest(): AnswerRequest {
-        return AnswerRequest(ANSWER, QUESTION)
+        val answer = "답변"
+        val question = QuestionEntity(
+            1,
+            "질문1",
+            LocalDateTime.now().monthValue,
+            LocalDateTime.now().dayOfMonth,
+        )
+        return AnswerRequest(answer, question)
     }
+
+    fun AnswerEntity.toResponse() = AnswerResponse(
+        this.id,
+        this.answer,
+        this.year,
+        this.createdTime,
+        this.updatedTime,
+    )
+
+    fun AnswerRequest.toEntity() = AnswerEntity(
+        0,
+        this.answer,
+        this.question,
+    )
 
 }
