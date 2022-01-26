@@ -9,4 +9,6 @@ interface AnswerRepository: JpaRepository<AnswerEntity, Int> {
 
     fun findByYearAndQuestionId(year: Int, questionId: Int): AnswerEntity?
 
+    fun findAllByQuestionId(questionId: Int): List<AnswerEntity>
+
 }

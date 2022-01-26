@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class AnswerSpringDataService (
+class AnswerSpringDataService(
     val repository: AnswerRepository
-): AnswerDataService {
+) : AnswerDataService {
 
     override fun create(request: AnswerRequest): AnswerResponse {
         val entity = AnswerEntity(0, request.answer, request.question)
@@ -38,11 +38,10 @@ class AnswerSpringDataService (
         return toAnswerResponse(entity)
     }
 
-    override fun selectAll(): List<AnswerResponse> {
-        val answerList = repository.findAll()
-        val ans = answerList.map { toAnswerResponse(it) }
+    override fun selectAllByQuestionId(questionId: Int): List<AnswerResponse> {
+        val answerList = repository.findAllByQuestionId(questionId)
 
-        return ans
+        return answerList.map { toAnswerResponse(it) }
     }
 
     override fun getTodayAnswer(questionId: Int): AnswerResponse? {

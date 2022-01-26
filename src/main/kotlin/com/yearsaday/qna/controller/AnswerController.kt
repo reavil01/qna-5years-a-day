@@ -30,8 +30,8 @@ class AnswerController(
         return answerDataService.select(id)
     }
 
-    fun selectAll(): List<AnswerResponse> {
-        return answerDataService.selectAll()
+    fun selectAllByQuestionId(questionId: Int): List<AnswerResponse> {
+        return answerDataService.selectAllByQuestionId(questionId)
     }
 
     fun getTodayAnswer(id: Int): AnswerResponse? {

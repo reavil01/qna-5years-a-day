@@ -46,11 +46,15 @@ class AnswerSpringController(
         return answerControllerImpl.select(id)
     }
 
-    @GetMapping("")
-    fun selectAll(): List<AnswerResponse> {
-        return answerControllerImpl.selectAll()
+    @GetMapping()
+    fun selectAllByQuestionId(
+        @RequestParam("qId") quesitonId: Int
+    ): List<AnswerResponse> {
+        return answerControllerImpl.selectAllByQuestionId(quesitonId)
     }
 
+    // FIX: Answer에 대한 정보를 가져오는 URL에서 questionId를 넘기는 것은
+    // RestAPI의 목적에 맞지 않는 것 같음. query로 날리는게 좋을듯.
     @PostMapping("/{questionId}")
     fun getTodayAnswer(
         @PathVariable("questionId") questionId: Int,

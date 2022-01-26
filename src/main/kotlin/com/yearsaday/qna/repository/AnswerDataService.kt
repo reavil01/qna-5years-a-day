@@ -13,7 +13,7 @@ interface AnswerDataService {
 
     fun select(id: Int): AnswerResponse?
 
-    fun selectAll(): List<AnswerResponse>
+    fun selectAllByQuestionId(questionId: Int): List<AnswerResponse>
 
     fun getTodayAnswer(questionId: Int): AnswerResponse?
 
