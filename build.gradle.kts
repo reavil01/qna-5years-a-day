@@ -7,6 +7,7 @@ plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.spring") version "1.5.31"
     kotlin("plugin.jpa") version "1.5.31"
+    jacoco
 }
 
 group = "com.yearsaday"
@@ -42,9 +43,18 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-//tasks.test {
-//    outputs.dir(snippetsDir)
-//}
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+    reportsDirectory.set(layout.buildDirectory.dir("customJacocoReportDir"))
+}
 
 //tasks.asciidoctor {
 //    inputs.dir(snippetsDir)
