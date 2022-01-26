@@ -25,7 +25,8 @@ class QuestionSpringDataService(
     }
 
     override fun update(id: Int, request: QuestionRequest): QuestionResponse {
-        val update = QuestionEntity(id, request.sentence, request.month, request.day)
+        val entity = repository.findById(id).orElseThrow()
+        val update = QuestionEntity(entity.id, request.sentence, request.month, request.day)
         val result = repository.save(update)
 
         return toQuestionResponse(result)
