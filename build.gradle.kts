@@ -41,22 +41,17 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestReport {
-    dependsOn(tasks.test)
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        csv.required.set(false)
+    }
 }
 
 jacoco {
     toolVersion = "0.8.7"
-    reportsDirectory.set(layout.buildDirectory.dir("customJacocoReportDir"))
 }
-
-//tasks.asciidoctor {
-//    inputs.dir(snippetsDir)
-//    dependsOn(test)
-//}
