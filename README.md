@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/reavil01/qna-5years-a-day/branch/main/graph/badge.svg?token=BA5373TSG8)](https://codecov.io/gh/reavil01/qna-5years-a-day)
+
 # Q&A a day web application
 This project is a Q&A a day journal web application.
 
