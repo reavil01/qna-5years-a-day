@@ -1,3 +1,4 @@
+[![git action](https://github.com/reavil01/qna-5years-a-day/actions/workflows/main.yml/badge.svg)](https://github.com/reavil01/qna-5years-a-day/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/reavil01/qna-5years-a-day/branch/main/graph/badge.svg?token=BA5373TSG8)](https://codecov.io/gh/reavil01/qna-5years-a-day)
 
 # Q&A a day web application
